@@ -429,42 +429,20 @@ namespace cryptonote
   //---------------------------------------------------------------
   bool get_block_hashing_blob(const block& b, blobdata& blob)
   {
-    if (b.blob_type == BLOB_TYPE_CRYPTONOTE_LOKI) {
-      blob = t_serializable_object_to_blob(b.major_version);
-      blob.append(reinterpret_cast<const char*>(&b.minor_version), sizeof(b.minor_version));
-      blob.append(reinterpret_cast<const char*>(&b.timestamp), sizeof(b.timestamp));
-      blob.append(reinterpret_cast<const char*>(&b.prev_id), sizeof(b.prev_id));
-    }
-    else {
-      blob = t_serializable_object_to_blob(static_cast<const block_header&>(b));
-    }
-    crypto::hash tree_root_hash = get_tx_tree_hash(b);
-    blob.append(reinterpret_cast<const char*>(&tree_root_hash), sizeof(tree_root_hash));
-    blob.append(tools::get_varint_data(b.tx_hashes.size()+1));
-    if (b.blob_type == BLOB_TYPE_CRYPTONOTE3) {
-      blob.append(reinterpret_cast<const char*>(&b.uncle), sizeof(b.uncle));
-    }
-    return true;
-  }
-  bool get_block_hashing_blob_nonce(const block& b, blobdata& blob)
-  {
-    if (b.blob_type == BLOB_TYPE_CRYPTONOTE_LOKI) {
-      blob = t_serializable_object_to_blob(b.major_version);
-      blob.append(reinterpret_cast<const char*>(&b.minor_version), sizeof(b.minor_version));
-      blob.append(reinterpret_cast<const char*>(&b.timestamp), sizeof(b.timestamp));
-      blob.append(reinterpret_cast<const char*>(&b.prev_id), sizeof(b.prev_id));
-    }
-    else {
-      blob = t_serializable_object_to_blob(static_cast<const block_header&>(b));
-    }
-    crypto::hash tree_root_hash = get_tx_tree_hash(b);
-    blob.append(reinterpret_cast<const char*>(&tree_root_hash), sizeof(tree_root_hash));
-    blob.append(tools::get_varint_data(b.tx_hashes.size()+1));
-    if (b.blob_type == BLOB_TYPE_CRYPTONOTE3) {
-      blob.append(reinterpret_cast<const char*>(&b.uncle), sizeof(b.uncle));
-    }
     if (b.blob_type == BLOB_TYPE_CRYPTONOTE_CUCKOO) {
-      if(b.major_version >= 13) blob.append(reinterpret_cast<const char*>(&b.nonce8), sizeof(b.nonce8));
+      blob = t_serializable_object_to_blob(b.major_version);
+      blob.append(reinterpret_cast<const char*>(&b.minor_version), sizeof(b.minor_version));
+      blob.append(reinterpret_cast<const char*>(&b.timestamp), sizeof(b.timestamp));
+      blob.append(reinterpret_cast<const char*>(&b.prev_id), sizeof(b.prev_id));
+    }
+    else {
+      blob = t_serializable_object_to_blob(static_cast<const block_header&>(b));
+    }
+    crypto::hash tree_root_hash = get_tx_tree_hash(b);
+    blob.append(reinterpret_cast<const char*>(&tree_root_hash), sizeof(tree_root_hash));
+    blob.append(tools::get_varint_data(b.tx_hashes.size()+1));
+    if (b.blob_type == BLOB_TYPE_CRYPTONOTE3) {
+      blob.append(reinterpret_cast<const char*>(&b.uncle), sizeof(b.uncle));
     }
     return true;
   }
@@ -478,7 +456,7 @@ namespace cryptonote
   bool get_block_hash(const block& b, crypto::hash& res)
   {
     blobdata blob;
-    if (!get_block_hashing_blob_nonce(b, blob))
+    if (!get_block_hashing_blob(b, blob))
       return false;
 
     if (b.blob_type == BLOB_TYPE_FORKNOTE2)

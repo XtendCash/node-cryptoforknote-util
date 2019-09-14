@@ -156,7 +156,7 @@ namespace cryptonote
 
     BEGIN_SERIALIZE()
       VARINT_FIELD(version)
-      if (blob_type == BLOB_TYPE_CRYPTONOTE_LOKI)
+      if (blob_type == BLOB_TYPE_CRYPTONOTE_CUCKOO)
       {
         FIELD(output_unlock_times)
         FIELD(is_deregister)
@@ -381,7 +381,6 @@ namespace cryptonote
     uint8_t minor_version;
     uint64_t timestamp;
     crypto::hash prev_id;
-    uint64_t nonce8;
     uint32_t nonce;
     crypto::cycle cycle;
 
@@ -390,9 +389,8 @@ namespace cryptonote
       VARINT_FIELD(minor_version)
       if (blob_type != BLOB_TYPE_FORKNOTE2) VARINT_FIELD(timestamp)
       FIELD(prev_id)
-      if ((blob_type == BLOB_TYPE_CRYPTONOTE_CUCKOO)&&(major_version >= 13)) FIELD(nonce8)
       if (blob_type != BLOB_TYPE_FORKNOTE2) FIELD(nonce)
-      if (blob_type == BLOB_TYPE_CRYPTONOTE_LOKI) FIELD(cycle)
+      if (blob_type == BLOB_TYPE_CRYPTONOTE_CUCKOO) FIELD(cycle)
     END_SERIALIZE()
   };
 
