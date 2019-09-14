@@ -448,7 +448,7 @@ namespace cryptonote
   }
   bool get_block_hashing_blob_nonce(const block& b, blobdata& blob)
   {
-    if (b.blob_type == BLOB_TYPE_CRYPTONOTE_CUCKOO) {
+    if (b.blob_type != BLOB_TYPE_CRYPTONOTE_CUCKOO) {
       blob = t_serializable_object_to_blob(b.major_version);
       blob.append(reinterpret_cast<const char*>(&b.minor_version), sizeof(b.minor_version));
       blob.append(reinterpret_cast<const char*>(&b.timestamp), sizeof(b.timestamp));
